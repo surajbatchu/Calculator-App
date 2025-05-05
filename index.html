@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Document</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="calculator">
+        <div class="calculator-top">
+            <div class="calculator-heading">
+                <div class="calculator-title">Casio</div>
+            </div>
+            <div class="calculator-solar-container">
+                <div class="calculator-sub-battery"></div>
+            </div>
+        </div>
+        <div class="calculator-screen-container">
+            <input type="text" class="calculator_screen" placeholder="0">
+        </div>
+        <div class="calculator-keyboard">
+            <button class="button clear allclear">AC</button>
+            <button class="button clear delete">DEL</button>
+            <button class="button percent">%</button>
+            <button class="button operatorBtn">&divide;</button>
+
+            <button class="button num">7</button>
+            <button class="button num">8</button>
+            <button class="button num">9</button>
+            <button class="button operatorBtn">&times;</button>
+
+            <button class="button num">4</button>
+            <button class="button num">5</button>
+            <button class="button num">6</button>
+            <button class="button operatorBtn">-</button>
+
+            <button class="button num">1</button>
+            <button class="button num">2</button>
+            <button class="button num">3</button>
+            <button class="button operatorBtn">+</button>
+
+            <button class="button num">0</button>
+            <button class="button num">00</button>
+            <button class="button num dot">.</button>
+            <button class="button equalBtn">=</button>
+        </div>
+    </div>
+    <script>
+        var screen = document.querySelector('.calculator_screen'),
+        numBtns = document.querySelectorAll('.num'),
+        operatorBtns = document.querySelectorAll('.operatorBtn'),
+        equalBtn = document.querySelector('.equalBtn'),
+        allClearBtn = document.querySelector('.allclear'),
+        deleteBtn = document.querySelector('.delete'),
+        percent = document.querySelector('.percent'),
+        resultDisplayed = false;
+
+        //Adding click handler to number buttons
+        for(var i = 0;i<numBtns.length;i++) {
+            numBtns[i].addEventListener('click',function(e){
+                var currentString = screen.value
+                var lastChar = currentString[currentString.length-1]
+
+                if(resultDisplayed === false) {
+                    screen.value += e.target.innerHTML
+                }
+                else if(resultDisplayed === true && lastChar == "+" || lastChar == "-" || lastChar == "×" || lastChar=="÷") {
+                    resultDisplayed = false
+                    screen.value += e.target.innerHTML
+                }
+                else {
+                    resultDisplayed = false
+                    screen.value = ""
+                    screen.value += e.target.innerHTML
+                }
+            }) 
+        }
+
+        //adding click handler to operator buttons
+        for(var i = 0;i<operatorBtns.length;i++) {
+            operatorBtns[i].addEventListener('click',function(e) {
+                //storing current input string add its last character in variables
+                let currentString = screen.value
+                let lastChar = currentString[currentString.length-1]
+                
+                if(lastChar === "+" || lastChar === "-" || lastChar === "×" || lastChar==="÷") {
+                    var newString = currentString.substring(0,currentString.length-1) + e.target.innerHTML
+                    screen.value = newString
+                }
+                else if(currentString.length == 0) {
+                    alert("Please enter number first!")
+                }
+                else {
+                    screen.value += e.target.innerHTML
+                }
+            })
+        }
+        //adding click handler to equal button
+        equalBtn.addEventListener('click',function(){
+            var inputString = screen.value
+
+            var number = inputString.split(/\+|\-|\×|\÷/g)
+
+            var operator = inputString.replace(/[0-9]|\./g,"").split("")
+
+            //let now loop through the array and do one operation at a time
+            //first lets divid then multiply then subsctraction and finally we'll do addition
+
+            var divide = operator.indexOf("÷")
+            while(divide != -1) {
+                number.splice(divide,2,number[divide]/number[divide + 1])
+                operator.splice(divide,1)
+                divide = operator.indexOf("÷")
+            }
+
+            var multiply = operator.indexOf("×")
+            while(multiply != -1) {
+                number.splice(multiply,2,number[multiply] * number[multiply + 1])
+                operator.splice(multiply,1)
+                multiply = operator.indexOf("×")
+            }
+
+            
+            var subsctraction = operator.indexOf("-")
+            while(subsctraction != -1) {
+                number.splice(subsctraction,2,number[subsctraction] - number[subsctraction + 1])
+                operator.splice(subsctraction,1)
+                subsctraction = operator.indexOf("-")
+            }
+
+            //using parseFloat to show result in string concatenation
+            var addition = operator.indexOf("+")
+            while(addition != -1) {
+                number.splice(addition,2,parseFloat(number[addition]) + parseFloat(number[addition+1]))
+                operator.splice(addition,1)
+                addition = operator.indexOf("+")
+            }
+            screen.value = number[0] // displying the output
+            resultDisplayed = true
+
+        })
+
+        allClearBtn.addEventListener('click',function(){
+            screen.value = ""
+        })
+
+        deleteBtn.addEventListener('click',function() {
+            var deleteValue = screen.value.slice(0,-1)
+            screen.value = deleteValue
+        })
+        percent.addEventListener('click',function() {
+            var perCent = eval(screen.value/100)
+            screen.value = perCent
+        })
+    </script>
+</body>
+</html>
