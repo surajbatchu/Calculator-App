@@ -24,4 +24,4 @@ A sleek and functional calculator app built with HTML, CSS, and JavaScript. This
 
 ## 📷 Screenshot
 
-![Calculator UI](<img width="949" alt="image" src="https://github.com/user-attachments/assets/4fddbd83-ffb5-48f6-b9b3-5ca66c6bd5e9" />)  
+![Calculator UI]![Screenshot 2025-05-05 175647](https://github.com/user-attachments/assets/0451ba38-eecc-449a-8fff-a0149ebad8db)
